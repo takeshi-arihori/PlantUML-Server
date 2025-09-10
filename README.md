@@ -1,5 +1,11 @@
 # PlantUML図表作成サービス
 
+[![CI](https://github.com/recursion-curriculum/plantuml-server/actions/workflows/ci.yml/badge.svg)](https://github.com/recursion-curriculum/plantuml-server/actions/workflows/ci.yml) [![Security](https://github.com/recursion-curriculum/plantuml-server/actions/workflows/security.yml/badge.svg)](https://github.com/recursion-curriculum/plantuml-server/actions/workflows/security.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+[![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)](https://laravel.com) [![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org) [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org) [![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-Latest-000000?style=for-the-badge&logo=shadcnui&logoColor=white)](https://ui.shadcn.com) [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+
+[![PHP](https://img.shields.io/badge/PHP-8.4-777BB4?style=for-the-badge&logo=php&logoColor=white)](https://www.php.net) [![Node.js](https://img.shields.io/badge/Node.js-22-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org) [![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com) [![Docker](https://img.shields.io/badge/Docker-Latest-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com)
+
 PlantUMLを使用してUML図を簡単に作成・管理できるWebサービスです。テキストベースの記述から美しい図表への変換により、効率的なソフトウェア設計・モデリングを実現します。
 
 ## 主な機能
@@ -34,7 +40,9 @@ PlantUMLを使用してUML図を簡単に作成・管理できるWebサービス
 
 ### バックエンド
 - **Laravel 12** - PHPフレームワーク
+- **PHP 8.4** - サーバーサイド言語
 - **Inertia.js** - モダンなSSRフレームワーク
+- **PlantUML Server** - 図表生成エンジン
 - **Pest** - テストフレームワーク
 - **Larastan** - 静的解析（Level 10）
 
@@ -42,10 +50,14 @@ PlantUMLを使用してUML図を簡単に作成・管理できるWebサービス
 - **React 19** - UIライブラリ
 - **TypeScript** - 型安全な開発
 - **Tailwind CSS 4** - ユーティリティファーストCSS
-- **Radix UI** - アクセシブルなUIコンポーネント
+- **shadcn/ui** - 再利用可能なUIコンポーネント
 - **Monaco Editor** - コードエディタ
+- **Vite** - 高速ビルドツール
 
-### インフラストラクチャ
+### データベース・インフラストラクチャ
+- **MySQL 8** - リレーショナルデータベース
+- **Redis** - キャッシュ・セッション管理
+- **Docker** - コンテナ化・開発環境
 - **AWS EC2** - アプリケーションサーバー
 - **AWS RDS Aurora** - データベース（MySQL互換）
 - **AWS S3** - ファイルストレージ
@@ -54,8 +66,11 @@ PlantUMLを使用してUML図を簡単に作成・管理できるWebサービス
 ## 環境構築
 
 ### 必要要件
-- PHP 8.2以上
-- Node.js 20以上
+- PHP 8.4以上
+- Node.js 22以上
+- MySQL 8以上
+- Redis（オプション）
+- Docker（推奨）
 - Composer
 - npm または yarn
 
@@ -184,11 +199,26 @@ npm run format       # Prettier
 - [ ] CI/CDパイプライン構築
 - [ ] 監視設定
 
-## ライセンス
+## 貢献
 
-MIT License
+プロジェクトへの貢献を歓迎します！詳細は[Contributing Guide](.github/CONTRIBUTING.md)をご覧ください。
 
----
+### 開発者向け
 
-**開発チーム**: Recursion Curriculum Project  
-**作成日**: 2025年1月
+- バグ報告: [Issues](https://github.com/recursion-curriculum/plantuml-server/issues/new/choose)
+- 機能提案: [Feature Request](https://github.com/recursion-curriculum/plantuml-server/issues/new/choose)
+- ディスカッション: [Discussions](https://github.com/recursion-curriculum/plantuml-server/discussions)
+
+### コミット規約
+
+[Conventional Commits](.github/commit-convention.md)に従ってください。
+
+```bash
+feat(editor): add auto-save functionality
+fix(diagram): resolve memory leak issue
+docs: update API documentation
+```
+
+## セキュリティ
+
+セキュリティに関する問題を発見した場合は、[Security Policy](.github/SECURITY.md)に従って報告してください。
