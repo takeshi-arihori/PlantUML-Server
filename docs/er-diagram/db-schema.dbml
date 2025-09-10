@@ -1,0 +1,245 @@
+// PlantUML図表作成サービス データベース設計
+// dbdiagram.io用のDBML形式
+
+// ユーザーテーブル（Laravel Breeze標準）
+Table users {
+  id bigint [pk, increment, note: "プライマリキー"]
+  name varchar(255) [not null, note: "ユーザー名"]
+  email varchar(255) [unique, not null, note: "メールアドレス"]
+  email_verified_at timestamp [null, note: "メール認証日時"]
+  password varchar(255) [not null, note: "パスワード（ハッシュ化）"]
+  remember_token varchar(100) [null, note: "Remember Meトークン"]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  indexes {
+    email [unique, name: "idx_users_email"]
+  }
+
+  note: "Laravel Breezeのデフォルトユーザーテーブル"
+}
+
+// プロジェクトテーブル
+Table projects {
+  id bigint [pk, increment, note: "プライマリキー"]
+  user_id bigint [not null, ref: > users.id, note: "ユーザーID"]
+  name varchar(255) [not null, note: "プロジェクト名"]
+  description text [null, note: "プロジェクト説明"]
+  template_type varchar(50) [not null, default: "general", note: "テンプレートタイプ"]
+  display_order int [not null, default: 0, note: "表示順序"]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  indexes {
+    user_id [name: "idx_projects_user_id"]
+    display_order [name: "idx_projects_display_order"]
+  }
+
+  note: "ユーザーごとに最大3プロジェクトまで"
+}
+
+// フォルダーテーブル
+Table folders {
+  id bigint [pk, increment, note: "プライマリキー"]
+  project_id bigint [not null, ref: > projects.id, note: "プロジェクトID"]
+  parent_folder_id bigint [null, ref: > folders.id, note: "親フォルダーID"]
+  name varchar(100) [not null, note: "フォルダー名"]
+  display_order int [not null, default: 0, note: "表示順序"]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  indexes {
+    project_id [name: "idx_folders_project_id"]
+    parent_folder_id [name: "idx_folders_parent_folder_id"]
+  }
+
+  note: "階層は最大2階層まで、1フォルダーあたり最大10図表まで"
+}
+
+// 図表テーブル
+Table diagrams {
+  id bigint [pk, increment, note: "プライマリキー"]
+  project_id bigint [not null, ref: > projects.id, note: "プロジェクトID"]
+  folder_id bigint [null, ref: > folders.id, note: "フォルダーID"]
+  name varchar(255) [not null, note: "図表名"]
+  diagram_type varchar(50) [not null, note: "図表タイプ"]
+  plantuml_code text [not null, note: "PlantUMLコード（最大10,000文字）"]
+  svg_path varchar(500) [null, note: "SVGファイルパス"]
+  png_path varchar(500) [null, note: "PNGファイルパス"]
+  thumbnail_path varchar(500) [null, note: "サムネイルパス"]
+  is_favorite boolean [not null, default: false, note: "お気に入りフラグ"]
+  last_accessed_at timestamp [null, note: "最終アクセス日時"]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  indexes {
+    project_id [name: "idx_diagrams_project_id"]
+    folder_id [name: "idx_diagrams_folder_id"]
+    last_accessed_at [name: "idx_diagrams_last_accessed"]
+  }
+
+  note: "plantuml_codeは最大10,000文字"
+}
+
+// 図表履歴テーブル
+Table diagram_histories {
+  id bigint [pk, increment, note: "プライマリキー"]
+  diagram_id bigint [not null, ref: > diagrams.id, note: "図表ID"]
+  version int [not null, note: "バージョン番号"]
+  plantuml_code text [not null, note: "PlantUMLコード"]
+  svg_path varchar(500) [null, note: "SVGファイルパス"]
+  png_path varchar(500) [null, note: "PNGファイルパス"]
+  change_note varchar(500) [null, note: "変更メモ"]
+  created_at timestamp [null]
+
+  indexes {
+    (diagram_id, version) [unique, name: "idx_diagram_histories_diagram_version"]
+    created_at [name: "idx_diagram_histories_created"]
+  }
+
+  note: "古いバージョンは圧縮保存を検討"
+}
+
+// テンプレートテーブル
+Table templates {
+  id bigint [pk, increment, note: "プライマリキー"]
+  category varchar(50) [not null, note: "カテゴリー"]
+  name varchar(255) [not null, note: "テンプレート名"]
+  description text [null, note: "説明"]
+  plantuml_code text [not null, note: "PlantUMLコード"]
+  diagram_type varchar(50) [not null, note: "図表タイプ"]
+  difficulty_level varchar(20) [null, note: "難易度"]
+  is_active boolean [not null, default: true, note: "有効フラグ"]
+  display_order int [not null, default: 0, note: "表示順序"]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  indexes {
+    category [name: "idx_templates_category"]
+    diagram_type [name: "idx_templates_diagram_type"]
+  }
+
+  note: "システム設計用、データベース設計用、汎用テンプレート"
+}
+
+// 練習問題テーブル
+Table practice_problems {
+  id bigint [pk, increment, note: "プライマリキー"]
+  category varchar(50) [not null, note: "カテゴリー"]
+  difficulty "enum('beginner','intermediate','advanced')" [not null, note: "難易度"]
+  title varchar(255) [not null, note: "問題タイトル"]
+  description text [not null, note: "問題文"]
+  hint text [null, note: "ヒント"]
+  answer_plantuml text [not null, note: "正解のPlantUMLコード"]
+  answer_explanation text [null, note: "解説"]
+  diagram_type varchar(50) [not null, note: "図表タイプ"]
+  display_order int [not null, default: 0, note: "表示順序"]
+  is_active boolean [not null, default: true, note: "有効フラグ"]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  indexes {
+    (category, difficulty) [name: "idx_practice_problems_category_difficulty"]
+    display_order [name: "idx_practice_problems_display_order"]
+  }
+
+  note: "初級10問、中級10問、上級10問"
+}
+
+// 練習進捗テーブル
+Table practice_progress {
+  id bigint [pk, increment, note: "プライマリキー"]
+  user_id bigint [not null, ref: > users.id, note: "ユーザーID"]
+  problem_id bigint [not null, ref: > practice_problems.id, note: "問題ID"]
+  status "enum('not_started','in_progress','completed')" [not null, default: "not_started", note: "ステータス"]
+  user_answer text [null, note: "ユーザーの回答"]
+  is_correct boolean [null, note: "正解フラグ"]
+  attempt_count int [not null, default: 0, note: "挑戦回数"]
+  completed_at timestamp [null, note: "完了日時"]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  indexes {
+    (user_id, problem_id) [unique, name: "idx_practice_progress_user_problem"]
+    status [name: "idx_practice_progress_status"]
+  }
+}
+
+// ユーザー設定テーブル
+Table user_settings {
+  id bigint [pk, increment, note: "プライマリキー"]
+  user_id bigint [not null, ref: > users.id, note: "ユーザーID"]
+  editor_theme varchar(50) [not null, default: "vs-dark", note: "エディターテーマ"]
+  editor_font_size int [not null, default: 14, note: "フォントサイズ"]
+  auto_save_enabled boolean [not null, default: true, note: "自動保存有効"]
+  auto_save_interval int [not null, default: 30, note: "自動保存間隔（秒）"]
+  default_diagram_type varchar(50) [not null, default: "class", note: "デフォルト図表タイプ"]
+  default_export_format varchar(20) [not null, default: "png", note: "デフォルトエクスポート形式"]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  indexes {
+    user_id [unique, name: "idx_user_settings_user_id"]
+  }
+}
+
+// 活動ログテーブル
+Table activity_logs {
+  id bigint [pk, increment, note: "プライマリキー"]
+  user_id bigint [null, ref: > users.id, note: "ユーザーID"]
+  action_type varchar(50) [not null, note: "アクションタイプ"]
+  target_type varchar(50) [not null, note: "対象タイプ"]
+  target_id bigint [null, note: "対象ID"]
+  metadata json [null, note: "メタデータ"]
+  ip_address varchar(45) [not null, note: "IPアドレス"]
+  user_agent varchar(500) [not null, note: "ユーザーエージェント"]
+  created_at timestamp [null]
+
+  indexes {
+    user_id [name: "idx_activity_logs_user_id"]
+    action_type [name: "idx_activity_logs_action_type"]
+    created_at [name: "idx_activity_logs_created_at"]
+  }
+
+  note: "月単位でのパーティショニングを検討、3ヶ月以上前のデータは別テーブルへアーカイブ"
+}
+
+// ゲストセッションテーブル
+Table guest_sessions {
+  id bigint [pk, increment, note: "プライマリキー"]
+  session_id varchar(255) [unique, not null, note: "セッションID"]
+  plantuml_code text [null, note: "PlantUMLコード"]
+  diagram_type varchar(50) [null, note: "図表タイプ"]
+  last_activity timestamp [not null, default: "CURRENT_TIMESTAMP", note: "最終活動時刻"]
+  created_at timestamp [null]
+  updated_at timestamp [null]
+
+  indexes {
+    session_id [unique, name: "idx_guest_sessions_session_id"]
+    last_activity [name: "idx_guest_sessions_last_activity"]
+  }
+
+  note: "24時間経過後に自動削除（Cronジョブ）"
+}
+
+// 外部キー制約のカスケード設定
+Ref: projects.user_id > users.id [delete: cascade]
+Ref: folders.project_id > projects.id [delete: cascade]
+Ref: folders.parent_folder_id > folders.id [delete: cascade]
+Ref: diagrams.project_id > projects.id [delete: cascade]
+Ref: diagrams.folder_id > folders.id [delete: set null]
+Ref: diagram_histories.diagram_id > diagrams.id [delete: cascade]
+Ref: practice_progress.user_id > users.id [delete: cascade]
+Ref: practice_progress.problem_id > practice_problems.id [delete: cascade]
+Ref: user_settings.user_id > users.id [delete: cascade]
+Ref: activity_logs.user_id > users.id [delete: set null]
+
+// Enum定義コメント
+/* 
+diagram_type: 'use_case', 'class', 'activity', 'state', 'component', 'sequence', 'er', 'mindmap', 'gantt'
+template_type: 'general', 'system_design', 'database_design', 'custom'
+difficulty: 'beginner', 'intermediate', 'advanced'
+practice_status: 'not_started', 'in_progress', 'completed'
+action_type: 'login', 'logout', 'create_project', 'update_project', 'delete_project', 
+            'create_diagram', 'update_diagram', 'delete_diagram', 'export_diagram', 'complete_practice'
+*/
