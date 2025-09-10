@@ -171,7 +171,7 @@ jobs:
           du -sh public/build/ || echo "Build directory not found"
           
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-assets
           path: public/build/
