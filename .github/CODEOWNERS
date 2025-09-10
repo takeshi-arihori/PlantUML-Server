@@ -1,0 +1,32 @@
+# Global owners
+* @recursion-curriculum/tech-leads
+
+# Backend
+/app/ @recursion-curriculum/backend-team
+/database/ @recursion-curriculum/backend-team
+/routes/ @recursion-curriculum/backend-team
+/tests/Feature/ @recursion-curriculum/backend-team
+/tests/Unit/ @recursion-curriculum/backend-team
+*.php @recursion-curriculum/backend-team
+
+# Frontend
+/resources/js/ @recursion-curriculum/frontend-team
+/resources/css/ @recursion-curriculum/frontend-team
+/resources/views/ @recursion-curriculum/frontend-team
+*.tsx @recursion-curriculum/frontend-team
+*.ts @recursion-curriculum/frontend-team
+*.jsx @recursion-curriculum/frontend-team
+*.js @recursion-curriculum/frontend-team
+
+# Infrastructure
+/.github/ @recursion-curriculum/devops-team
+*.yml @recursion-curriculum/devops-team
+*.yaml @recursion-curriculum/devops-team
+
+# Documentation
+/docs/ @recursion-curriculum/docs-team
+*.md @recursion-curriculum/docs-team
+README.md @recursion-curriculum/tech-leads
+
+# Database
+/database/migrations/ @recursion-curriculum/database-team @recursion-curriculum/backend-team
