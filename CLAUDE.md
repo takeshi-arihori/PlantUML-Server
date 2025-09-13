@@ -148,10 +148,6 @@ php artisan test --parallel   # PHP tests with parallel execution
 - Use `import` instead of `require()`
 - Use `export` instead of `module.exports`
 
-### Script Development Guidelines
-- Scripts in `/scripts/` directory follow ES module standards
-- No CommonJS syntax allowed in `.js` files
-- Use `import fs from 'fs'` instead of `const fs = require('fs')`
 
 ## Database Migrations Order
 Follow this sequence when creating new migrations:

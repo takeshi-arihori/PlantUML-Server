@@ -53,9 +53,7 @@ jobs:
         run: npm ci
 
       - name: Generate Wayfinder types
-        run: |
-          php artisan wayfinder:generate
-          node scripts/extend-wayfinder.js
+        run: php artisan wayfinder:generate --with-form
 
       - name: Run ESLint
         run: npm run lint

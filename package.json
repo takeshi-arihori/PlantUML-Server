@@ -9,7 +9,7 @@
         "format:check": "prettier --check resources/",
         "lint": "eslint . --fix",
         "types": "tsc --noEmit",
-        "wayfinder:generate": "php artisan wayfinder:generate && node scripts/extend-wayfinder.js"
+        "wayfinder:generate": "php artisan wayfinder:generate --with-form"
     },
     "devDependencies": {
         "@eslint/js": "^9.19.0",
