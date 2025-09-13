@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 // Form methods to add to action files
 const formMethods = {
@@ -153,6 +153,5 @@ function main() {
   console.log('Wayfinder extension completed!');
 }
 
-if (require.main === module) {
-  main();
-}
+// Run main function when this file is executed directly
+main();

@@ -128,6 +128,31 @@ resources/js/
 - **Formatting**: Prettier with Tailwind CSS plugin
 - **Linting**: ESLint with React hooks rules
 
+## Development Best Practices
+
+### Pre-commit Workflow
+**IMPORTANT**: Always run all quality checks before committing:
+
+```bash
+# Required before every commit
+npm run lint          # ESLint checks and auto-fixes
+npm run format:check   # Prettier formatting verification
+npm run types         # TypeScript type checking
+./vendor/bin/phpstan analyse  # PHP static analysis
+php artisan test --parallel   # PHP tests with parallel execution
+```
+
+### ES Module Compatibility
+- Project uses `"type": "module"` in package.json
+- All `.js` files must use ES module syntax (import/export)
+- Use `import` instead of `require()`
+- Use `export` instead of `module.exports`
+
+### Script Development Guidelines
+- Scripts in `/scripts/` directory follow ES module standards
+- No CommonJS syntax allowed in `.js` files
+- Use `import fs from 'fs'` instead of `const fs = require('fs')`
+
 ## Database Migrations Order
 Follow this sequence when creating new migrations:
 1. users (Laravel Breeze)
