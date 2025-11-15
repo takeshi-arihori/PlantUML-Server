@@ -22,6 +22,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.4
+          extensions: mbstring, pdo_sqlite, sqlite3
           tools: composer:v2
           coverage: xdebug
 
@@ -37,14 +38,17 @@ jobs:
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Build Assets
-        run: npm run build
-
       - name: Copy Environment File
         run: cp .env.example .env
 
       - name: Generate Application Key
         run: php artisan key:generate
+
+      - name: Generate Wayfinder types
+        run: php artisan wayfinder:generate --with-form
+
+      - name: Build Assets
+        run: npm run build
 
       - name: Tests
         run: ./vendor/bin/pest
